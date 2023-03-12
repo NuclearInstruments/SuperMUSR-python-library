@@ -21,7 +21,7 @@
 import adc120sdk
 
 CH_MAP = range(0,32)
-DGZ_IP = ["tcp://192.168.102.167:5557"]
+DGZ_IP = ["tcp://192.168.102.150:5557"]
 
 #DGZ_IP = ["tcp://d1.sw:10112"]
 
@@ -303,6 +303,11 @@ for idx, sdk in enumerate(sdks):
     # print(sdk.read_data("get_darkcount_spectra"))
     # print(sdk.read_data("get_waveforms"))
     sdk.execute_cmd("start_acquisition")
+    print(sdk.get_parameter("system.Tsys.rack",0))
+    print(sdk.get_parameter("system.Tsys.dgtz",0))
+    print(sdk.get_parameter("system.Tsys.dgtz",1))
+    print(sdk.get_parameter("system.Tsys.dgtz",2))
+    print(sdk.get_parameter("system.Tsys.dgtz",3))
 
    
 
