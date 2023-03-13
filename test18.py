@@ -8,7 +8,8 @@ print ("Acquisizione rumore")
 
 failed = False
 sdk = adc120sdk.AdcControl()
-test_report = []
+test_report = {"dgtz":[]}
+digitizer = []
 i=0
 
 sdks = []
@@ -18,7 +19,7 @@ for ip in DGZ_IP:
     try:
         sdks[-1].connect(ip)
         print ("Digitizer %s connesso" % ip)
-        test_report["dgtz"][i]["connection"] = True
+        #digitizer.append(["connection"] = True
     except:
         print ("Digitizer %s non raggiungibile" % ip)
         sdks.pop()
@@ -27,7 +28,7 @@ for ip in DGZ_IP:
 for sdk in sdks:
     try:
         s=sdk.get_parameter("dgtz.info.section")
-        test_report["dgtz"][i]["section"] = int(float(s))
+        #digitizer[i]["section"] = int(float(s))
 
         sdk.set_parameter("dgtz.send_delay", "0")
         # digitizer configuration
@@ -66,7 +67,7 @@ for sdk in sdks:
             print("Error executing digitizer{i} programming:" + str(e))
 
         try:
-            sdk.execute_cmd("start_acquisition")
+            sdk.execute_cmd("stop_acquisition")
         except Exception as e:
             failed = True
             print("Error executing digitizer{i} start:" + str(e))
@@ -75,10 +76,12 @@ for sdk in sdks:
             W=sdk.read_data("get_waveforms")
             if W is not None:
                 for ch in range(0,8):
-                    wave = W["data"]["wave"][ch]
+                    wave = W["wave"][ch]
                     # calculate noise RMS, mean and peak-to-peak
-                    rms = np.sqrt(np.mean(np.square(wave)))
                     mean = np.mean(wave)
+                    wave = wave - mean
+                    rms = np.sqrt(np.mean(np.square(wave)))
+                    
                     p2p = np.max(wave) - np.min(wave)
                     # calculate fft of the waveform
                     fft = np.fft.fft(wave)
@@ -88,23 +91,21 @@ for sdk in sdks:
                     freq = np.fft.fftfreq(len(ps), 1/1000)
                     # calculate the power spectrum density
                     psd = ps/np.sum(ps)
-                    # calculate the noise power
-                    noise_power = np.sum(psd)
+    
                     # fine the first five peaks in fft and save them
                     peaks = np.argpartition(psd, -5)[-5:]
                     # save the results in the report
 
 
-                    test_report["dgtz"][i]["rms"] = rms
-                    test_report["dgtz"][i]["mean"] = mean
-                    test_report["dgtz"][i]["p2p"] = p2p
-                    test_report["dgtz"][i]["noise_power"] = noise_power
-                    test_report["dgtz"][i]["freq"] = freq
-                    test_report["dgtz"][i]["psd"] = psd
-                    test_report["dgtz"][i]["ps"] = ps
-                    test_report["dgtz"][i]["fft"] = fft
-                    test_report["dgtz"][i]["wave"] = wave
-                    test_report["dgtz"][i]["peaks"] = peaks
+                    digitizer[i]["rms"] = rms
+                    digitizer[i]["mean"] = mean
+                    digitizer[i]["p2p"] = p2p
+                    digitizer[i]["freq"] = freq
+                    digitizer[i]["psd"] = psd
+                    digitizer[i]["ps"] = ps
+                    digitizer[i]["fft"] = fft
+                    digitizer[i]["wave"] = wave
+                    digitizer[i]["peaks"] = peaks
     except:
         #print error mesagge and which function generate it
         print ("Errore durante la lettura dei parametri")

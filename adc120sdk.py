@@ -81,3 +81,4 @@ class AdcControl:
 
     def get_events(self):
         return self.streameventssocket.recv()        
+    

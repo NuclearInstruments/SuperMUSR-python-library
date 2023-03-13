@@ -5,7 +5,7 @@ import time
 from DigitizerAnalogTraceMessage import DigitizerAnalogTraceMessage
 
 
-DGZ_IP = ["tcp://192.168.102.186:5556"]
+DGZ_IP = ["tcp://192.168.102.150:5556"]
 #DGZ_IP = ["tcp://d1.sw:10113"]
 
 sdks = []

@@ -303,6 +303,7 @@ for idx, sdk in enumerate(sdks):
     # print(sdk.read_data("get_darkcount_spectra"))
     # print(sdk.read_data("get_waveforms"))
     sdk.execute_cmd("start_acquisition")
+
     print(sdk.get_parameter("system.Tsys.rack",0))
     print(sdk.get_parameter("system.Tsys.dgtz",0))
     print(sdk.get_parameter("system.Tsys.dgtz",1))
