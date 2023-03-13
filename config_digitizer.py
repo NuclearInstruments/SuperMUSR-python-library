@@ -309,7 +309,8 @@ for idx, sdk in enumerate(sdks):
     print(sdk.get_parameter("system.Tsys.dgtz",1))
     print(sdk.get_parameter("system.Tsys.dgtz",2))
     print(sdk.get_parameter("system.Tsys.dgtz",3))
-
+    print(sdk.get_parameter("system.availableram",0))
+    print(sdk.get_parameter("system.ipaddress",0))
    
 
 
