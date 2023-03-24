@@ -8,17 +8,14 @@ print ("Verificare con un multimetro la presenza di 45V su HV 0 e 59V su HV 1")
 
 failed = False
 sdk = adc120sdk.AdcControl()
-test_report = []
-i=0
+hv=[]
 ip = DGZ_IP[0]
 try:
     sdk.connect(ip)
     print ("Digitizer %s connesso" % ip)
-    test_report["dgtz"][i]["connection"] = True
 except:
     print ("Digitizer %s non raggiungibile" % ip)
     exit(-2)
-
 
 try:
   
@@ -39,26 +36,43 @@ try:
         print("Error executing hv programming:" + str(e))
 
     for i in range (0,25):
-        test_report["HV"][0]["V"] = sdk.get_parameter("stave.BIAS.probes.Vmodule",0)
-        test_report["HV"][1]["V"] = sdk.get_parameter("stave.BIAS.probes.Vmodule",1)
-        test_report["HV"][0]["I"] = sdk.get_parameter("stave.BIAS.probes.Imodule",0)
-        test_report["HV"][1]["I"] = sdk.get_parameter("stave.BIAS.probes.Imodule",1)
+        Vmodule0 = sdk.get_parameter("stave.BIAS.probes.Vmodule",0)
+        Vmodule1 = sdk.get_parameter("stave.BIAS.probes.Vmodule",1)
+        Imodule0 = sdk.get_parameter("stave.BIAS.probes.Imodule",0)
+        Imodule1 = sdk.get_parameter("stave.BIAS.probes.Imodule",1)
+        
+        print(Vmodule0) 
+        print(Vmodule1) 
+        print(Imodule0) 
+        print(Imodule1)
+
+        data = {
+               "hv_0_V" :  Vmodule0,
+               "hv_1_V" :  Vmodule1,
+               "hv_0_I" :  Imodule0,
+               "hv_1_I" :  Imodule1
+        } 
+
+        hv.append(data)
         time.sleep(0.5)
-    
+    # sdk.set_parameter("stave.BIAS.enable", "false",0)
+    # sdk.set_parameter("stave.BIAS.enable", "false",1) 
+    sdk.execute_cmd("configure_hv") 
+
 except:
     #print error mesagge and which function generate it
     print ("Errore durante la lettura dei parametri")
     failed = True
     
-  
+test_report = {
+    "hv":hv,
+}
 
-
-# salva il report in json
-with open('test_report.json', 'w') as outfile:
-    json.dump(test_report, outfile)
+print("Report=" + json.dumps(test_report,  separators=(',', ':')))
 
 if failed:
     print ("Test fallito")
     exit(-1)
 else:
     print ("Test completato")
+    exit(0)

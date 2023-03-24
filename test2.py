@@ -7,14 +7,11 @@ print ("Connettere ad un generatore di funzione il lemo 0 (100Hz) e verificare c
 failed = False
 sdks = []
 
-test_report = []
-i=0
 for ip in DGZ_IP:
     sdks.append(adc120sdk.AdcControl())
     try:
         sdks[-1].connect(ip)
         print ("Digitizer %s connesso" % ip)
-        test_report["dgtz"][i]["connection"] = True
     except:
         print ("Digitizer %s non raggiungibile" % ip)
         sdks.pop()
@@ -22,26 +19,23 @@ for ip in DGZ_IP:
     
 for sdk in sdks:
     try:
-        sdk.set_parameter("dgtz.lemo.mode", "in_50", 0)
-        sdk.set_parameter("trg.mode", "lemo_0")
+        # sdk.set_parameter("trg.self_rate", 50)
+        # sdk.set_parameter("trg.mode", "lemo_0")
+        sdk.set_parameter("dgtz.lemo.mode", "in_h", 0)
+        sdk.set_parameter("dgtz.lemo.source", "high", 0)
         sdk.set_parameter("dgtz.lemo.mode", "out", 1)
-        sdk.set_parameter("dgtz.lemo.source", "trigger_out", 1)
+        sdk.set_parameter("dgtz.lemo.source", "lemo_0", 1)
 
         sdk.execute_cmd("configure_dgtz")
+        
     except:
         #print error mesagge and which function generate it
         print ("Errore durante la lettura dei parametri")
         failed = True
-        
-    i=i+1
-
-
-# salva il report in json
-with open('test_report.json', 'w') as outfile:
-    json.dump(test_report, outfile)
 
 if failed:
     print ("Test fallito")
     exit(-1)
 else:
     print ("Test completato")
+    exit(0)

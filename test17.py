@@ -4,45 +4,44 @@ import time
 from test_defs import *
 
 print ("Test ADC SYNC")
-print ("Applicare un segnale al lemo 0 della base e verificare sul test point della DAQ la presenza di quel segnale")
-print ("Per ogni DAQ. Il segnale è anche presente per verifica su lemo 1 della base")
-
+print ("Applicare un segnale al lemo 0 della base e verificare che il segnale")
+print ("sia presente sul lemo 0 di ogni DAQ e su lemo 1 della base.")
+sdks = []
 failed = False
-sdk = adc120sdk.AdcControl()
-test_report = []
-i=0
-ip = DGZ_IP[0]
-try:
-    sdk.connect(ip)
-    print ("Digitizer %s connesso" % ip)
-    test_report["dgtz"][i]["connection"] = True
-except:
-    print ("Digitizer %s non raggiungibile" % ip)
-    exit(-2)
+for ip in DGZ_IP:
+    sdks.append(adc120sdk.AdcControl())
+    try:
+        sdks[-1].connect(ip)
+        print ("Digitizer %s connesso" % ip)
+    except:
+        print ("Digitizer %s non raggiungibile" % ip)
+        sdks.pop()
+        failed = True
 
+for sdk in sdks:
+    try:
 
-try:
+        sdk.set_parameter("base.lemo.mode", "in_h", 0)
+        sdk.set_parameter("base.lemo.mode", "out", 1)
+        sdk.set_parameter("base.adc_sync.source", "lemo_0", 0)
+        sdk.set_parameter("base.lemo.source", "adc_sync", 1)
 
-    sdk.set_parameter("base.lemo.mode", "in", 0)
-    sdk.set_parameter("base.lemo.mode", "out", 1)
-    sdk.set_parameter("base.adc_sync.source", "lemo_0", 0)
-    sdk.set_parameter("base.lemo.source", "adc_sync", 1)
+        sdk.set_parameter("dgtz.lemo.mode", "out", 0)
+        sdk.set_parameter("dgtz.lemo.source", "adc_sync", 0)
+        sdk.set_parameter("dgtz.lemo.mode", "out", 1)
+        sdk.set_parameter("dgtz.lemo.source", "adc_sync", 1)
 
-    sdk.execute_cmd("configure_dgtz")
-except:
-    #print error mesagge and which function generate it
-    print ("Errore durante la lettura dei parametri")
-    failed = True
+        sdk.execute_cmd("configure_dgtz")
+        sdk.execute_cmd("configure_base")
+
+    except:
+        #print error message and which function generate it
+        print ("Errore durante la lettura dei parametri")
+        failed = True
     
-  
-
-
-# salva il report in json
-with open('test_report.json', 'w') as outfile:
-    json.dump(test_report, outfile)
-
 if failed:
     print ("Test fallito")
     exit(-1)
 else:
     print ("Test completato")
+    exit(0)

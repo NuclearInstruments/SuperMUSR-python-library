@@ -7,27 +7,23 @@ import numpy as np
 print ("Acquisizione rumore")
 
 failed = False
-sdk = adc120sdk.AdcControl()
-test_report = {"dgtz":[]}
-digitizer = []
-i=0
-
 sdks = []
-i=0
-for ip in DGZ_IP:
-    sdks.append(adc120sdk.AdcControl())
-    try:
-        sdks[-1].connect(ip)
-        print ("Digitizer %s connesso" % ip)
-        #digitizer.append(["connection"] = True
-    except:
-        print ("Digitizer %s non raggiungibile" % ip)
-        sdks.pop()
-        failed = True
-    
+daq = []
+
+ip = DGZ_IP[###IP_INDEX###]
+
+sdks.append(adc120sdk.AdcControl())
+try:
+    sdks[-1].connect(ip)
+    print ("Digitizer %s connesso" % ip)
+except:
+    print ("Digitizer %s non raggiungibile" % ip)
+    sdks.pop()
+    failed = True
+   
 for sdk in sdks:
     try:
-        s=sdk.get_parameter("dgtz.info.section")
+        s=int(float(sdk.get_parameter("dgtz.info.section")))
         #digitizer[i]["section"] = int(float(s))
 
         sdk.set_parameter("dgtz.send_delay", "0")
@@ -59,65 +55,76 @@ for sdk in sdks:
             sdk.set_parameter("in.offset", 0, i)
             # trigger threshold (LSB)
             sdk.set_parameter("in.chmap", i, i)
-        
+       
         try:
             sdk.execute_cmd("configure_dgtz")
         except Exception as e:
             failed = True
             print("Error executing digitizer{i} programming:" + str(e))
+        
+        sdk.set_parameter("base.common_clock.source", "clk_int", 0)
+        sdk.execute_cmd("configure_base")
 
-        try:
-            sdk.execute_cmd("stop_acquisition")
-        except Exception as e:
-            failed = True
-            print("Error executing digitizer{i} start:" + str(e))
-   
-        for j in range(0,100):
+        for j in range(0,###N_MEASURE###):
             W=sdk.read_data("get_waveforms")
             if W is not None:
                 for ch in range(0,8):
                     wave = W["wave"][ch]
+                    nwave = np.array(wave)
                     # calculate noise RMS, mean and peak-to-peak
-                    mean = np.mean(wave)
-                    wave = wave - mean
-                    rms = np.sqrt(np.mean(np.square(wave)))
-                    
-                    p2p = np.max(wave) - np.min(wave)
+                    mean = np.average(nwave)
+                    nwave = nwave - mean
+                    rms = np.sqrt(np.mean(np.square(nwave)))
+                   
+                    p2p = np.max(nwave) - np.min(nwave)
                     # calculate fft of the waveform
-                    fft = np.fft.fft(wave)
+                    fft = np.fft.fft(nwave)
                     # calculate the power spectrum
                     ps = np.abs(fft)**2
                     # calculate the frequency
                     freq = np.fft.fftfreq(len(ps), 1/1000)
                     # calculate the power spectrum density
                     psd = ps/np.sum(ps)
-    
+   
                     # fine the first five peaks in fft and save them
                     peaks = np.argpartition(psd, -5)[-5:]
                     # save the results in the report
 
+                    print ("DAQ " + str(s))
+                    print ("Channel %d" % ch)
+                    print ("Average: %.2f" % mean)
+                    print ("Peak to peak: %.2f" % p2p)
+                    print ("RMS: %.2f" % rms)
 
-                    digitizer[i]["rms"] = rms
-                    digitizer[i]["mean"] = mean
-                    digitizer[i]["p2p"] = p2p
-                    digitizer[i]["freq"] = freq
-                    digitizer[i]["psd"] = psd
-                    digitizer[i]["ps"] = ps
-                    digitizer[i]["fft"] = fft
-                    digitizer[i]["wave"] = wave
-                    digitizer[i]["peaks"] = peaks
+                    data = {
+                            "daq" : s,
+                            "channel" : ch,
+                            "rms" : rms,
+                            "mean" : mean,
+                            "p2p" : p2p
+                    }    
+   
+                    daq.append(data)
+
+                    test_wave = {
+                        "wave" : wave[0:2047]
+                    }
+
+                    print("Wave" + str(ch+1) + "=" + json.dumps(test_wave, separators=(',', ':') ))
     except:
         #print error mesagge and which function generate it
         print ("Errore durante la lettura dei parametri")
         failed = True
 
-    i=i+1
-# salva il report in json
-with open('test_report.json', 'w') as outfile:
-    json.dump(test_report, outfile)
+test_report = {
+    "daq" : daq
+}
+
+print("Report=" + json.dumps(test_report,  separators=(',', ':')))
 
 if failed:
     print ("Test fallito")
     exit(-1)
 else:
     print ("Test completato")
+    exit(0)

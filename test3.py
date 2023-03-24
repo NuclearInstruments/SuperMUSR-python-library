@@ -3,18 +3,15 @@ import json
 from test_defs import *
 
 print ("Questo test verifica i lemo del DAQ: lemo 0 uscita e lemo 1 uscita")
-print ("Verificare la presenza di un segnale a 50 Hz su entrabe i lemo")
+print ("Verificare con l'oscilloscopio la presenza di un segnale a 50 Hz su entrabe i lemo")
 failed = False
 sdks = []
 
-test_report = []
-i=0
 for ip in DGZ_IP:
     sdks.append(adc120sdk.AdcControl())
     try:
         sdks[-1].connect(ip)
         print ("Digitizer %s connesso" % ip)
-        test_report["dgtz"][i]["connection"] = True
     except:
         print ("Digitizer %s non raggiungibile" % ip)
         sdks.pop()
@@ -35,15 +32,9 @@ for sdk in sdks:
         print ("Errore durante la lettura dei parametri")
         failed = True
         
-    i=i+1
-
-
-# salva il report in json
-with open('test_report.json', 'w') as outfile:
-    json.dump(test_report, outfile)
-
 if failed:
     print ("Test fallito")
     exit(-1)
 else:
     print ("Test completato")
+    exit(0)

@@ -7,13 +7,11 @@ print ("Verificare che con un oscilloscopio che sulla base dal lemo 0 a 7 appaia
 
 failed = False
 sdk = adc120sdk.AdcControl()
-test_report = []
-i=0
+
 ip = DGZ_IP[2]
 try:
     sdk.connect(ip)
     print ("Digitizer %s connesso" % ip)
-    test_report["dgtz"][i]["connection"] = True
 except:
     print ("Digitizer %s non raggiungibile" % ip)
     exit(-2)
@@ -34,26 +32,22 @@ try:
     sdk.set_parameter("base.lemo.source", "sync_c_7", 7)
 
     for i in range(0,8):
-        sdk.set_parameter("dgtz.sync.outmode", "t0_out", i)
+        sdk.set_parameter("dgtz.sync.outmode", "trigger_out", i)
     
     sdk.set_parameter("trg.mode", "periodic")
     sdk.set_parameter("trg.self_rate", 132)
 
     sdk.execute_cmd("configure_dgtz")
+    sdk.execute_cmd("configure_base")
+
 except:
     #print error mesagge and which function generate it
     print ("Errore durante la lettura dei parametri")
     failed = True
-    
-  
-
-
-# salva il report in json
-with open('test_report.json', 'w') as outfile:
-    json.dump(test_report, outfile)
 
 if failed:
     print ("Test fallito")
     exit(-1)
 else:
     print ("Test completato")
+    exit(0)

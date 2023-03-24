@@ -1,10 +1,10 @@
 import adc120sdk
 import json
+import time
 from test_defs import *
 
-print ("Questo test verifica i lemo della BASE: tutti input")
-print ("Collegare un generatore di segnale a ciascun input e verificare ")
-print ("la frequenza sul display")
+print ("Spegne alimentazione di tutte le stave")
+
 failed = False
 sdk = adc120sdk.AdcControl()
 
@@ -17,19 +17,11 @@ except:
     exit(-2)
 
 try:
-    for i in range(0,16):
-        sdk.set_parameter("base.lemo.mode", "in_50", i)
-
-    sdk.execute_cmd("configure_dgtz")
+    sdk.set_parameter("base.stave.power", "false", 0)
     sdk.execute_cmd("configure_base")
+    
 except:
     #print error mesagge and which function generate it
     print ("Errore durante la lettura dei parametri")
     failed = True
-
-if failed:
-    print ("Test fallito")
-    exit(-1)
-else:
-    print ("Test completato")
-    exit(0)
+    
