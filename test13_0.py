@@ -10,7 +10,7 @@ failed = False
 sdk = adc120sdk.AdcControl()
 hv=[]
 
-ip = DGZ_IP[2]
+ip = DGZ_IP[0]
 try:
     sdk.connect(ip)
     print ("Digitizer %s connesso" % ip)

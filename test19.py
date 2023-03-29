@@ -77,7 +77,7 @@ for sdk in sdks:
 
                 dt = 1.0
                 rising_edges_a = np.where(np.diff(nwave) > 600)[0]  # Indici dei fronti di salita con tolleranza del 10%
-                falling_edges_a = np.where(np.diff(nwave) < -750)[0]  # Indici dei fronti di discesa con tolleranza del 10%
+                falling_edges_a = np.where(np.diff(nwave) < -800)[0]  # Indici dei fronti di discesa con tolleranza del 10%
 
                 # Lista degli indici da mantenere
                 if (len(rising_edges_a) !=0):

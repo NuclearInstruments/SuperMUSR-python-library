@@ -18,24 +18,25 @@ except:
     print ("Digitizer %s non raggiungibile" % ip)
     exit(-2)
 
-try:
-    sdk.set_parameter("base.common_clock.source", "clk_ext", 0)
-    for i in range(0,16):
-        sdk.set_parameter("base.lemo.mode", "out", i)
-    sdk.set_parameter("base.lemo.source", "clk_in", 0)
-    sdk.execute_cmd("configure_dgtz")
-    sdk.execute_cmd("configure_base")
+for k in range(1,1000):
+    try:
+        sdk.set_parameter("base.common_clock.source", "clk_ext", 0)
+        for i in range(0,16):
+            sdk.set_parameter("base.lemo.mode", "out", i)
+        sdk.set_parameter("base.lemo.source", "clk_in", 0)
+        sdk.execute_cmd("configure_dgtz")
+        sdk.execute_cmd("configure_base")
 
-    time.sleep(1)
-    p = sdk.get_parameter("system.clk.pllstatus", 0)
-    str_p = str(p)
-    print(str_p)
-    if (str_p != "refa:ok;refb:ok;lock1:ok;lock2:ok;ref_sel:B;ref_missing:false;hovering:false"):
+        time.sleep(0.01)
+        p = sdk.get_parameter("system.clk.pllstatus", 0)
+        str_p = str(p)
+        print(str_p)
+        if (str_p != "refa:ok;refb:ok;lock1:ok;lock2:ok;ref_sel:B;ref_missing:false;hovering:false"):
+            failed = True
+    except:
+        #print error mesagge and which function generate it
+        print ("Errore durante la lettura dei parametri")
         failed = True
-except:
-    #print error mesagge and which function generate it
-    print ("Errore durante la lettura dei parametri")
-    failed = True
     
 if failed:
     print ("Test fallito")
