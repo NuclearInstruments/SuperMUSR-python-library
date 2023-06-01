@@ -84,10 +84,10 @@ for sdk in sdks:
                     keep_edges = [rising_edges_a[0]]
                 
                     # Controllo della distanza minima tra gli edge
-                    for i in range(1, len(rising_edges_a)):
+                    for i in range(0, len(rising_edges_a)):
                         if rising_edges_a[i] - keep_edges[-1] > 50:
                             keep = True
-                            for j in range(1, len(falling_edges_a)):
+                            for j in range(0, len(falling_edges_a)):
                                 if (abs(rising_edges_a[i] - falling_edges_a[j]) < 50) :   
                                     keep = False
                             if (keep):
@@ -99,10 +99,10 @@ for sdk in sdks:
                     rise_times = np.zeros(len(rising_edges))  # Array per memorizzare i rise time
                     for i, edge in enumerate(rising_edges):
                         # Trova il tempo in cui il segnale sale dal 10% al 90% del suo valore massimo con tolleranza del 10%
-                        threshold = 0.1 * (nwave[edge+10] - nwave[edge-10]) + nwave[edge-10]
-                        idx_start = np.where(nwave[edge-10:edge+10] >= threshold)[0][0] + edge-10
-                        threshold = 0.9 * (nwave[edge+10] - nwave[edge-10]) + nwave[edge-10]
-                        idx_end = np.where(nwave[edge-10:edge+10] >= threshold)[0][0] + edge-10
+                        threshold = 0.1 * (nwave[edge+20] - nwave[edge-20]) + nwave[edge-20]
+                        idx_start = 40 - np.where(np.flip(nwave[edge-20:edge+20]) <= threshold)[0][0] 
+                        threshold = 0.9 * (nwave[edge+20] - nwave[edge-20]) + nwave[edge-20]
+                        idx_end = np.where(nwave[edge-20:edge+20] >= threshold)[0][0] 
                         rise_times[i] = (idx_end - idx_start) * dt  # Calcola il rise time
                 
                     # Calcola il tempo medio di salita
