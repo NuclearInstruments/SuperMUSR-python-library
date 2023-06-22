@@ -21,7 +21,7 @@
 import adc120sdk
 
 CH_MAP = range(0,32)
-DGZ_IP = ["tcp://192.168.102.150:5557"]
+DGZ_IP = ["tcp://192.168.102.117:5557"]
 
 #DGZ_IP = ["tcp://d1.sw:10112"]
 
@@ -61,7 +61,7 @@ for idx, sdk in enumerate(sdks):
     # delay on external trigger (us)
     sdk.set_parameter("dgtz.trg_delay", 0)
     # trigger source: "ext_trigger", "self_le", "self_de", "periodic", "manual", "lemo_0"
-    sdk.set_parameter("trg.mode", "periodic")
+    sdk.set_parameter("trg.mode", "lemo_0")
     # internal trigger mode: "or", "and2", "and"
     sdk.set_parameter("trg.self_coinc", "or")
     # periodic trigger rate (Hz)
@@ -212,7 +212,7 @@ for idx, sdk in enumerate(sdks):
     # "lvds_0", "lvds_1", "lvds_2", "lvds_3", "lvds_28", "lvds_29", "lvds_30", "lvds_31",
     # "lemo_0", "lemo_1", "lemo_2", "lemo_3", "lemo_4", "lemo_5", "lemo_6", "lemo_7",
     # "lemo_8", "lemo_9", "lemo_10", "lemo_11", "lemo_12", "lemo_13", "lemo_14", "lemo_15"
-    sdk.set_parameter("base.t0.source", "lemo_0", 0)    
+    sdk.set_parameter("base.t0.source", "t0_self", 0)    
 
     sdk.set_parameter("base.t0.freq", 25.0, 0)
 
@@ -311,6 +311,14 @@ for idx, sdk in enumerate(sdks):
     print(sdk.get_parameter("system.Tsys.dgtz",3))
     print(sdk.get_parameter("system.availableram",0))
     print(sdk.get_parameter("system.ipaddress",0))
+
+
+    sdk.set_parameter("sw_process.enable", "true")
+    sdk.set_parameter("sw_process.histogram.treshold", 20)
+    sdk.set_parameter("sw_process.histogram.delta", 10)
+    sdk.set_parameter("sw_process.histogram.inib", 25)
+    sdk.set_parameter("sw_process.histogram.rebin",1)
+    sdk.set_parameter("sw_process.histogram.nf",0)
    
 
 

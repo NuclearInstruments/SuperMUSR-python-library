@@ -14,7 +14,6 @@ ip = DGZ_IP[0]
 try:
     sdk.connect(ip)
     print ("Digitizer %s connesso" % ip)
-    test_report["dgtz"][i]["connection"] = True
 except:
     print ("Digitizer %s non raggiungibile" % ip)
     exit(-2)
@@ -39,10 +38,10 @@ try:
         print("Error executing hv programming:" + str(e))
 
     for i in range (0,25):
-        test_report["HV"][0]["V"] = sdk.get_parameter("stave.BIAS.probes.Vmodule",0)
-        test_report["HV"][1]["V"] = sdk.get_parameter("stave.BIAS.probes.Vmodule",1)
-        test_report["HV"][0]["I"] = sdk.get_parameter("stave.BIAS.probes.Imodule",0)
-        test_report["HV"][1]["I"] = sdk.get_parameter("stave.BIAS.probes.Imodule",1)
+        print(sdk.get_parameter("stave.BIAS.probes.Vmodule",0))
+        print(sdk.get_parameter("stave.BIAS.probes.Vmodule",1))
+        print(sdk.get_parameter("stave.BIAS.probes.Imodule",0))
+        print(sdk.get_parameter("stave.BIAS.probes.Imodule",1))
         time.sleep(0.5)
     
 except:
@@ -51,11 +50,6 @@ except:
     failed = True
     
   
-
-
-# salva il report in json
-with open('test_report.json', 'w') as outfile:
-    json.dump(test_report, outfile)
 
 if failed:
     print ("Test fallito")

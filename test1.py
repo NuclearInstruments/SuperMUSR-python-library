@@ -13,8 +13,6 @@ for ip in DGZ_IP:
     sdks.append(adc120sdk.AdcControl())
     try:
         sdks[-1].connect(ip)
-        print ("Digitizer %s connesso" % ip)
-        test_report["dgtz"][i]["connection"] = True
     except:
         print ("Digitizer %s non raggiungibile" % ip)
         sdks.pop()
@@ -30,19 +28,15 @@ for sdk in sdks:
         fwver = sdk.get_parameter("dgtz.probes.fwver")
 
         print("sn: " + sn + "  section: " + str(section))
-        print("SW-VER: " + swver + " (" + compile_data + ")  -- FPGA-VER: "  + fwver) 
+        print("SW-VER: " + swver + " (" + compile_data + ")  -- FPGA-VER: "  + hex(int(fwver))) 
 
-        test_report["dgtz"][i]["section"] = section
-        test_report["dgtz"][i]["sn"] = sn
-        test_report["dgtz"][i]["swver"] = swver
-        test_report["dgtz"][i]["compile_data"] = compile_data
-        test_report["dgtz"][i]["fwver"] = fwver
 
-        test_report["base"]["Track"] = sdk.get_parameter("system.Tsys.rack",0)
-        test_report["base"]["Tsys0"] = sdk.get_parameter("system.Tsys.dgtz",0)
-        test_report["base"]["Tsys1"] = sdk.get_parameter("system.Tsys.dgtz",1)
-        test_report["base"]["Tsys2"] = sdk.get_parameter("system.Tsys.dgtz",2)
-        test_report["base"]["Tsys3"] = sdk.get_parameter("system.Tsys.dgtz",3)
+
+        print(sdk.get_parameter("system.Tsys.rack",0))
+        print(sdk.get_parameter("system.Tsys.dgtz",0))
+        print(sdk.get_parameter("system.Tsys.dgtz",1))
+        print(sdk.get_parameter("system.Tsys.dgtz",2))
+        print(sdk.get_parameter("system.Tsys.dgtz",3))
 
     except:
         #print error mesagge and which function generate it
