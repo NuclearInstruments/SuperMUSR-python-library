@@ -27,7 +27,7 @@ datas=[]
 def thread_readout_function(sdk):
     global data_array
     while 1:
-        spectra = sdk.read_data("get_tof_spectra")
+        spectra = sdk.read_data("get_A_spectra")
         mutex.acquire()
         datas.clear()
         for i in range(0, len(spectra)):
