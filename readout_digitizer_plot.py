@@ -17,7 +17,7 @@ from threading import Thread, Lock
 mutex = Lock()
 
 dump_raw = False
-dump = False
+dump = True
 if dump==True:
     f = open('data_file.csv', 'w')
     writer = csv.writer(f)
@@ -25,7 +25,7 @@ if dump==True:
 
     
 
-DGZ_IP = ["tcp://192.168.102.117:5556"]
+DGZ_IP = ["tcp://130.246.54.157:5556"]
 #DGZ_IP = ["tcp://d1.sw:10113"]
 
 sdks = []
@@ -63,7 +63,7 @@ def thread_readout_function(sdk):
             datas.append(data)
 
             if dump==True:
-                if (i==0):
+                if (i==3):
                     writer.writerow(data)
         mutex.release()
 

@@ -304,7 +304,7 @@ for idx, sdk in enumerate(sdks):
 
         sdk.set_parameter("stave.BIAS.correction_mode", "manual",i) # in software manually change voltage by
 
-        sdk.set_parameter("stave.BIAS.correction_manual", 0.2,i) # if in manual, the second argument is the correction offset
+        sdk.set_parameter("stave.BIAS.correction_manual", 0,i) # if in manual, the second argument is the correction offset
 
         # SiPM correction coefficient in V/°C
 
@@ -312,7 +312,7 @@ for idx, sdk in enumerate(sdks):
 
         # offset in V
 
-        sdk.set_parameter("stave.offset", 0,i) #this is DC offset, tune to scale dV over the ADC bit depth. TODO.
+        sdk.set_parameter("stave.offset", -0.6,i) #this is DC offset, tune to scale dV over the ADC bit depth. TODO.
 
        
 
@@ -686,25 +686,51 @@ print("stave.BIAS.V", sdk.get_parameter("stave.BIAS.V",0))
 
 sdk.set_parameter("sw_process.enable", "true")
 
-sdk.set_parameter("sw_process.histogram.treshold", 20)
+sdk.set_parameter("sw_process.histogram.trigger_mode",0)
+sdk.set_parameter("sw_process.histogram.histeresys",5)
+
+# sdk.set_parameter("sw_process.histogram.treshold", 20)
+sdk.set_parameter("sw_process.histogram.treshold", 10,0)
+sdk.set_parameter("sw_process.histogram.treshold", 10,1)
+sdk.set_parameter("sw_process.histogram.treshold", 10,2)
+sdk.set_parameter("sw_process.histogram.treshold", 20,3)
+sdk.set_parameter("sw_process.histogram.treshold", 10,4)
+sdk.set_parameter("sw_process.histogram.treshold", 10,5)
+sdk.set_parameter("sw_process.histogram.treshold", 10,6)
+sdk.set_parameter("sw_process.histogram.treshold", 10,7)
+
+
+sdk.set_parameter("sw_process.histogram.treshold_ampl", 10,0)
+sdk.set_parameter("sw_process.histogram.treshold_ampl", 10,1)
+sdk.set_parameter("sw_process.histogram.treshold_ampl", 10,2)
+sdk.set_parameter("sw_process.histogram.treshold_ampl", 10,3)
+sdk.set_parameter("sw_process.histogram.treshold_ampl", 10,4)
+sdk.set_parameter("sw_process.histogram.treshold_ampl", 10,5)
+sdk.set_parameter("sw_process.histogram.treshold_ampl", 10,6)
+sdk.set_parameter("sw_process.histogram.treshold_ampl", 10,7)
+
+# for i in range(0,8):
+#     sdk.set_parameter("sw_process.histogram.deconv_m", -0.925,i)
+
+sdk.set_parameter("sw_process.histogram.deconv_enable", 0)
 
 sdk.set_parameter("sw_process.histogram.delta", 10)
 
-sdk.set_parameter("sw_process.histogram.inib", 25)
+sdk.set_parameter("sw_process.histogram.inib", 10)
 
-sdk.set_parameter("sw_process.histogram.rebin",1)
+sdk.set_parameter("sw_process.histogram.rebin",4)
 
 sdk.set_parameter("sw_process.histogram.nf",0)
+
+sdk.set_parameter("sw_process.histogram.A.blsub",0)
+sdk.set_parameter("sw_process.histogram.A.prebl",20)
+sdk.set_parameter("sw_process.histogram.A.maxw",40)
 
 
 
 sdk.set_parameter("sw_process.hist", 10)
 
 sdk.set_parameter("base.stave.power", "true", 0)
-
-
-
-
 
 # configure event processor (derivative threshold)
 
