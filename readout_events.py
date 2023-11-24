@@ -5,13 +5,14 @@ import time
 from DigitizerEventListMessage import DigitizerEventListMessage
 
 
-DGZ_IP = ["tcp://192.168.102.186:5555"]
+DGZ_IP = ["tcp://192.168.102.177:5555"]
 #DGZ_IP = ["tcp://d1.sw:10113"]
 
 sdks = []
 
 
 def thread_readout_function(sdk):
+    print("Thread STARTED")
     while 1:
         message = sdk.get_events()
         fb = DigitizerEventListMessage.GetRootAsDigitizerEventListMessage(message)

@@ -15,7 +15,7 @@ from threading import Thread, Lock
 mutex = Lock()
 
 
-DGZ_IP = ["tcp://130.246.54.157:5557"]
+DGZ_IP = ["tcp://192.168.102.177:5557"]
 #DGZ_IP = ["tcp://d1.sw:10112"]
 
 sdks = []

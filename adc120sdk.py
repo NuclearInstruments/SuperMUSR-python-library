@@ -23,6 +23,11 @@ class AdcControl:
     def connect_events(self, address):
         self.streameventssocket.connect(address)
 
+    def set_timeout(self, timeout):
+        self.socket.setsockopt(zmq.RCVTIMEO, timeout)
+        self.streamsocket.setsockopt(zmq.RCVTIMEO, timeout)
+        self.streameventssocket.setsockopt(zmq.RCVTIMEO, timeout)
+
     def set_parameter(self, param, value, index=0):
         request = {
             "command": "set_parameter",

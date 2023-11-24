@@ -1,0 +1,133 @@
+{
+    "dgtz": {
+        "send_delay": {"command":"dgtz.send_delay", "value": 0, "type": "float"},
+        "pre": {"command":"dgtz.pre", "value": 0.5, "type": "float"},
+        "post": {"command":"dgtz.post", "value": 16, "type": "float"},
+        "trg_delay": {"command":"dgtz.trg_delay", "value": 0, "type": "float"},
+        "lemo_mode": {"command":"dgtz.lemo.mode", "count" : 2, "value": "in_50", "type": "list", "values": ["in_h", "in_50", "out"]},
+        "lemo_source": {"command":"dgtz.lemo.source", "count" : 2, "value": "t0_out", "type": "list", "values": ["gnd", "high", "t0_out", "trigger_out", "tot_ch0","tot_ch1","tot_ch2","tot_ch3","tot_ch4","tot_ch5","tot_ch6","tot_ch7","run", "busy", "acquisition","mp_gate" ]},
+        "sync_outmode": {"command":"dgtz.sync.outmode", "count" : 8, "value": "gnd", "type": "list", "values" : ["gnd", "high", "t0_out", "trigger_out", "tot_ch0", "tot_ch1","tot_ch2","tot_ch3","tot_ch4","tot_ch5","tot_ch6","tot_ch7","run", "busy", "acquisition","mp_gate"]},
+        "emu": {
+            "amp": {"command":"dgtz.emu.amp", "count":8, "value": 1000, "type": "float"},
+            "period": {"command":"dgtz.emu.period",  "replicate":8, "value": 500, "type": "float"},
+            "noiseamp": {"command":"dgtz.emu.noiseamp",  "value": 1000, "type": "float"},
+            "offset": {"command":"dgtz.emu.offset",  "value": 2000, "type": "float"},
+            "enable_pulse": {"command":"dgtz.emu.enable_pulse", "value": "false", "type": "list", "values": ["true", "false"]},
+            "enable": {"command":"dgtz.emu.enable", "value": "false", "type": "list", "values": ["true", "false"]}
+        },
+        "wavemode": {"command":"dgtz.wavemode", "value": "analog", "type": "list", "values": ["analog", "processed"]}
+    },
+    "in": {
+        "polarity": {"command":"in.polarity","value": "neg", "type": "list", "values": ["pos", "neg"]},
+        "offset": {"command":"in.offset","count":8, "value": 0, "type": "float"}
+    },
+    "trg": {
+        "mode": {"command":"trg.mode","value": "periodic", "type": "list", "values": ["ext_trigger", "self_le", "self_de", "periodic", "manual", "lemo_0"]},
+        "self_coinc": {"command":"trg.self_coinc","value": "or", "type": "list", "values": ["or", "and2", "and"]},
+        "self_rate": {"command":"trg.self_rate","value": 5, "type": "float"},
+        "trigger_inib": {"command":"trg.trigger_inib","value": 10, "type": "float"},
+        "threshold": {"command":"trg.threshold", "count":8, "value": 2500, "type": "float"},
+        "mask": {"command":"trg.mask","value": "[1, 1, 1, 0, 1, 1, 1, 1]", "type": "text"}
+    },
+    "stave": {
+        "BIAS": {
+            "enable": {"command":"stave.BIAS.enable", "count":2,"value": "true", "type": "list", "values": ["true", "false"]},
+            "V": {"command":"stave.BIAS.V", "count":2,"value": 57, "type": "float"},
+            "max_v": {"command":"stave.BIAS.max_v", "count":2,"value": 61, "type": "float"},
+            "max_i": {"command":"stave.BIAS.max_i", "count":2,"value": 3, "type": "float"},
+            "correction_mode": {"command":"stave.BIAS.correction_mode", "replicate":24, "value": "manual", "type": "list", "values": ["off", "auto", "manual"]},
+            "correction_manual": {"command":"stave.BIAS.correction_manual","replicate":24,"value": 0, "type": "float"},
+            "correction_coeff": {"command":"stave.BIAS.correction_coeff","replicate":24, "value": 0.035, "type": "float"},
+            "offset": {"command":"stave.offset","replicate":24,"value": -0.6, "type": "float"}
+        },
+        "T": {
+            "target": {"command":"stave.T.target","replicate":16,"value": 35, "type": "float"},
+            "enable": {"command":"stave.T.enable","replicate":16, "value":"true", "type": "list", "values": ["true", "false"]},
+            "PID": {
+                "P": {"command":"stave.PID.P","replicate":16,"value": 25, "type": "float"},
+                "I": {"command":"stave.PID.I","replicate":16,"value": 5, "type": "float"},
+                "D": {"command":"stave.PID.D","replicate":16,"value": 0, "type": "float"}
+            }            
+        }
+    },
+    "mp": {
+        "spectrum_readout_mode": {"command":"mp.spectrum_readout_mode","value": "auto", "type": "list", "values": ["manual", "auto"]},
+        "spectrum_mode": {"command":"mp.spectrum_mode","value": "charge_integrator", "type": "list", "values": ["charge_integrator", "peak_holder"]},
+        "auto_spectrum_time": {"command":"mp.auto_spectrum_time","value": 5000, "type": "float"},
+        "gate_len": {"command":"mp.gate_len","value": 20, "type": "float"},
+        "delay_from_trigger": {"command":"mp.delay_from_trigger","value": 0.5, "type": "float"},
+        "trigger_inib": {"command":"mp.trigger_inib","value": 0, "type": "float"},
+        "bl_len": {"command":"mp.bl_len","value": 0.05, "type": "float"},
+        "bl_hold": {"command":"mp.bl_hold","value": 0.05, "type": "float"},
+        "int_pre": {"command":"mp.int_pre","value": 0.015, "type": "float"},
+        "int_post": {"command":"mp.int_post","value": 0.015, "type": "float"},
+        "peak_detector_window": {"command":"mp.peak_detector_window","value": 0.5, "type": "float"},
+        "enable": {"command":"mp.enable","replicate":8,"value": "true", "type": "list", "values": ["true", "false"]},
+        "gain": {"command":"mp.gain","count":8,"value": 2, "type": "float"},
+        "threshold": {"command":"mp.threshold","count":8,"value": 15, "type": "float"},
+        "offset": {"command":"mp.offset","count":8,"value": 150, "type": "float"}
+    },
+    "base": {
+        "lemo_mode": {"command":"base.lemo.mode","value": "in", "type": "list", "values": ["in", "out"]},
+        "lemo_source": {"command":"base.lemo.source","value": "gnd", "type": "list", "values": [
+            "gnd", "high", "t0_out", "common_trigger", "clk_in", "busy", "status_packet_int", "veto_int",
+            "frame_sp_rx", "veto_usart_rx", "pulse_gen", "frame_usart_tx", "veto_usart_tx", "lvds_x",
+            "lvds_x+16", "rj45_lvds_0", "rj45_lvds_1", "rj45_lvds_2", "rj45_lvds_3", "adc_sync", "reg_x", "veto_x",
+            "sync_a_0","sync_a_1", "sync_a_2", "sync_a_3", "sync_a_4", "sync_a_5", "sync_a_6", "sync_a_7",
+            "sync_b_0","sync_b_1", "sync_b_2", "sync_b_3", "sync_b_4", "sync_b_5", "sync_b_6", "sync_b_7",
+            "sync_c_0","sync_c_1", "sync_c_2", "sync_c_3", "sync_c_4", "sync_c_5", "sync_c_6", "sync_c_7",
+            "sync_d_0","sync_d_1", "sync_d_2", "sync_d_3", "sync_d_4", "sync_d_5", "sync_d_6", "sync_d_7"            
+        ]},
+        "sync_outmode": {"command":"dgtz.sync.outmode","value": "gnd", "type": "list", "values": [
+            "gnd", "high", "common_trigger", "t0_out", "common_trigger", "clk_in", "busy", "status_packet_int",
+            "veto_int", "veto_in", "veto_in+8",  
+            "lemo_0", "lemo_1", "lemo_2", "lemo_3", "lemo_4", "lemo_5", "lemo_6", "lemo_7",
+            "lemo_8", "lemo_9", "lemo_10", "lemo_11", "lemo_12", "lemo_13", "lemo_14", "lemo_15"            
+        ]},
+        "pulsegen_freq": {"command":"base.pulsegen.freq","value": 100000.0, "type": "float"},
+        "sp_rx": {
+            "frame_source": {"command":"base.sp_rx.frame_source","value": "lemo_0", "type": "list", "values": ["lemo_0", "lemo_4", "lemo_8", "lemo_12", "rj45_lvds_0", "lvds_0", "lvds_8", "lvds_16", "lvds_24", "frame_usart_tx"]},
+            "veto_source": {"command":"base.sp_rx.veto_source","value": "lemo_1", "type": "list", "values": ["lemo_1", "lemo_5", "lemo_9", "lemo_13", "rj45_lvds_1", "lvds_1", "lvds_9", "lvds_17", "lvds_25", "veto_usart_tx"]}
+        },
+        "t0": {
+            "source": {"command":"base.t0.source","value": "lemo_2", "type": "list", "values": [
+                "gnd", "high", "t0_self", "rj45_lvds_0", "rj45_lvds_1", "rj45_lvds_2", "rj45_lvds_3",
+                "lvds_0", "lvds_1", "lvds_2", "lvds_3", "lvds_28", "lvds_29", "lvds_30", "lvds_31",
+                "lemo_0", "lemo_1", "lemo_2", "lemo_3", "lemo_4", "lemo_5", "lemo_6", "lemo_7",
+                "lemo_8", "lemo_9", "lemo_10", "lemo_11", "lemo_12", "lemo_13", "lemo_14", "lemo_15"
+            ]},
+            "freq": {"command":"base.t0.freq","value": 25.0, "type": "float"}
+        },
+        "common_clock_source": {"command":"base.common_clock.source","value": "clk_int", "type": "list", "values": [
+            "clk_int", "clk_ext", "rj45_lvds_0", "rj45_lvds_1", "rj45_lvds_2", "rj45_lvds_3",
+            "lvds_16", "lvds_26"
+        ]},
+        "adc_sync_source": {"command":"base.adc_sync.source","value": "internal",  "type": "list", "values": [
+            "internal", "gnd", "high", "rj45_lvds_0", "rj45_lvds_1", "rj45_lvds_2", "rj45_lvds_3",
+            "lvds_6", "lvds_14", "lvds_23", "lvds_27",
+            "lemo_0", "lemo_1", "lemo_2", "lemo_3", "lemo_4", "lemo_5", "lemo_6", "lemo_7",
+            "lemo_8", "lemo_9", "lemo_10", "lemo_11", "lemo_12", "lemo_13", "lemo_14", "lemo_15"]},
+        "stave_power": {"command":"base.stave.power","value": "true", "type": "list", "values": ["true", "false"]}
+    },
+    "sw_process": {
+        "enable": {"command":"sw_process.enable","value": "true", "type": "list", "values": ["true", "false"]},
+        "histogram": {
+            "trigger_mode": {"command":"sw_process.histogram.trigger_mode","value": 0, "type": "float"},
+            "histeresys": {"command":"sw_process.histogram.histeresys","value": 5, "type": "float"},
+            "treshold": {"command":"sw_process.histogram.treshold", "count":8, "value":10, "type": "float"},
+            "treshold_ampl": {"command":"sw_process.histogram.treshold_ampl", "count":8, "value": 10, "type": "float"},
+            "deconv_m": {"command":"sw_process.histogram.deconv_m", "count":8,"value": -0.925, "type": "float"},
+            "deconv_enable": {"command":"sw_process.histogram.deconv_enable","value": 1,  "type": "list", "values": [1,0]},
+            "delta": {"command":"sw_process.histogram.delta","value": 10, "type": "float"},
+            "inib": {"command":"sw_process.histogram.inib","value": 10, "type": "float"},
+            "rebin": {"command":"sw_process.histogram.rebin","value": 4, "type": "float"},
+            "nf": {"command":"sw_process.histogram.nf","value": 0, "type": "float"},
+            "A": {
+                "blsub": {"command":"sw_process.histogram.A.blsub","value": 0, "type": "float"},
+                "prebl": {"command":"sw_process.histogram.A.prebl","value": 20, "type": "float"},
+                "maxw": {"command":"sw_process.histogram.A.maxw","value": 40, "type": "float"}
+            }
+        },
+        "hist": {"command":"sw_process.hist","value": 10, "type": "float"}
+    }
+}

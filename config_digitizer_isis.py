@@ -66,7 +66,7 @@ CH_MAP = range(0,32)
 
 #DGZ_IP = ["tcp://130.246.50.78:5557"]
 
-DGZ_IP = ["tcp://130.246.54.157:5557"]
+DGZ_IP = ["tcp://192.168.102.177:5557"]
 
  
 
@@ -148,7 +148,7 @@ for idx, sdk in enumerate(sdks):
 
     # trigger source: "ext_trigger", "self_le", "self_de", "periodic", "manual", "lemo_0"
 
-    sdk.set_parameter("trg.mode", "ext_trigger") # self_le is the LE trigger level
+    sdk.set_parameter("trg.mode", "periodic") # self_le is the LE trigger level
 
     #sdk.set_parameter("trg.mode", "self_le") 
 
@@ -691,7 +691,7 @@ sdk.set_parameter("sw_process.histogram.histeresys",5)
 
 # sdk.set_parameter("sw_process.histogram.treshold", 20)
 sdk.set_parameter("sw_process.histogram.treshold", 10,0)
-sdk.set_parameter("sw_process.histogram.treshold", 10,1)
+sdk.set_parameter("sw_process.histogram.treshold", 500,1)
 sdk.set_parameter("sw_process.histogram.treshold", 10,2)
 sdk.set_parameter("sw_process.histogram.treshold", 20,3)
 sdk.set_parameter("sw_process.histogram.treshold", 10,4)
@@ -701,7 +701,7 @@ sdk.set_parameter("sw_process.histogram.treshold", 10,7)
 
 
 sdk.set_parameter("sw_process.histogram.treshold_ampl", 10,0)
-sdk.set_parameter("sw_process.histogram.treshold_ampl", 10,1)
+sdk.set_parameter("sw_process.histogram.treshold_ampl", 500,1)
 sdk.set_parameter("sw_process.histogram.treshold_ampl", 10,2)
 sdk.set_parameter("sw_process.histogram.treshold_ampl", 10,3)
 sdk.set_parameter("sw_process.histogram.treshold_ampl", 10,4)
@@ -709,10 +709,10 @@ sdk.set_parameter("sw_process.histogram.treshold_ampl", 10,5)
 sdk.set_parameter("sw_process.histogram.treshold_ampl", 10,6)
 sdk.set_parameter("sw_process.histogram.treshold_ampl", 10,7)
 
-# for i in range(0,8):
-#     sdk.set_parameter("sw_process.histogram.deconv_m", -0.925,i)
+for i in range(0,8):
+    sdk.set_parameter("sw_process.histogram.deconv_m", -0.925,i)
 
-sdk.set_parameter("sw_process.histogram.deconv_enable", 0)
+sdk.set_parameter("sw_process.histogram.deconv_enable", 1)
 
 sdk.set_parameter("sw_process.histogram.delta", 10)
 
